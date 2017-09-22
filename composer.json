@@ -1,4 +1,5 @@
 {
+    "name": "rob4lderman/monad-php",
     "require": {
         "php": ">=5.3.0"
     },
