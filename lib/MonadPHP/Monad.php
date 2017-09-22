@@ -17,8 +17,18 @@ abstract class Monad {
         return new static($value);
     }
 
-    public function bind($function, array $args = array()) {
-        return $this::unit($this->runCallback($function, $this->value, $args));
+    // gen's strict compiler warning: https://github.com/ircmaxell/monad-php/pull/4
+    // public function bind($function, array $args = array()) {
+    //     return $this::unit($this->runCallback($function, $this->value, $args));
+    // }
+
+    public function __call($name, $arguments) {
+        if ($name == 'bind') {
+            $function = array_shift($arguments);
+            $args = empty($arguments) ? array() : array_shift($arguments);
+            return $this::unit($this->runCallback($function, $this->value, $args));
+        }
+        throw new \BadMethodCallException('Call to undefined method '.$name);
     }
 
     public function extract() {
